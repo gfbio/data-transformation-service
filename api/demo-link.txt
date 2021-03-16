@@ -1,0 +1,10 @@
+http://data-transformation.gfbio.org/api/transform?transformation=2&version=1&input_file_url=http%3A%2F%2Fdata-transformation.gfbio.org%2Fapi%2Fdemo-data%2Fbgbm_herbarium.xml
+
+https://dev-gfbio.bgbm.org/tools/dts-demo/api/transform?transformation=3&version=1&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false
+https://dev-gfbio.bgbm.org/tools/dts-demo/api/transform?transformation=3&version=1&input_file_url=http://ww3.bgbm.org/tmp/test.zip&input_file_zipped=true
+
+https://gfbio.biowikifarm.net/internal/Concept_for_Data_Transformation_Service
+
+curl -L "http://transformation.gfbio.org/api/transform?transformation=3&version=1&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false"
+
+curl -L "http://transformation.gfbio.org/api/transform?transformation=3&version=1&input_file_url=https://ww3.bgbm.org/biocase/downloads/Herbar/Herbarium%20Berolinense%2C%20Berlin%20%28B%29.ABCD_2.06.zip&input_file_zipped=true"

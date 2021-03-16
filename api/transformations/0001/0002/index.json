@@ -1,0 +1,10 @@
+{"version": {
+    "version_comment": "minor changes and fixes",
+    "version_date": "2019-05-16",
+    "title": "ABCD XML to PanSimple",
+    "description": "converts ABCD to PanSimple",
+    "input_format": "ABCD 2.06",
+    "output_format": "PanSimple",
+    "files": ["abcd_2.06-pansimple.xslt"],
+    "engine": "xslt"
+}}

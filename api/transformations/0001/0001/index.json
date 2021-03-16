@@ -1,0 +1,10 @@
+{"version": {
+    "version_comment": "initial version",
+	"version_date": "2019-03-12",
+	"title": "ABCD XML to PanSimple",
+	"description": "converts ABCD 2.06 format to the PanSimple metadata format for havesting by the GFBio Indexer",
+	"input_format": "ABCD 2.06",
+	"output_format": "PanSimple",
+	"files": ["abcd_2.06-pansimple.xslt"],
+	"engine": "xslt"
+}}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GFBio Data Transformation Service</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!--link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script-->
+
+</head>
+<body>
+
+<div class="jumbotron" style="padding:1rem">
+    <div class="row justify-content-md-left">
+        <div class="col-md-auto">
+            <img class="img-responsive" style="height: 100px" src="gfbio_logo_claim.svg" alt="GFBio logo">
+        </div>
+        <div class="col-md-auto">
+            <h1>GFBio Data Transformation Service</h1>
+            <h3>WP3, Task 3.4</h3>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin:0">
+
+<!--iframe src="https://giphy.com/embed/7Bgpw7PwdxoDC" width="960" height="534" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+</p-->
+
+<h4>How to start transformations</h4>
+<p>(For the detailed concept and a full API documentation, please refer to the <a href="https://gfbio.biowikifarm.net/internal/Concept_for_Data_Transformation_Service">internal wiki</a>.)</p>
+A transformation job can be initiated using the <i>transform</i> service, which accepts the following four parameters:<br>
+<i>transformation:</i> ID of the transformation to be executed,<br>
+<i>version:</i> version ID (optional),<br>
+<i>input_file_url:</i> URL of the source document,<br>
+<i>input_file_zipped:</i> specifies whether the source document is zipped or not.</p>
+<p>A list of transformations offered by the service can be retrieved by using <a target="_blank" href="api/transformations/">this request</a>.<br>&nbsp;</p>
+
+<h4>#1: ABCD > PANGAEA PanSimple</h4>
+<p>Transforms a single ABCD document into a PanSimple document, which is used for harvesting purposes in the PANGAEA project.<br>
+<a target="_blank" href="api/transformations/1">Version list</a> | <a target="_blank" href="api/transform?transformation=1&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false">Sample request</a>
+
+<h4>#2: ABCD > HTML Landing Page</h4>
+<p>Transforms a single ABCD document into a human-readable description of the dataset stored in the document. The page generated contains the dataset's metadata (such as title, description, contacts, taxonomic and geographic scope) and lists the individual records with their catalog number and scientific identification result. If the ABCD field RecordURI is filled, the detailed record pages are linked.<br>
+<a target="_blank" href="api/transformations/2">Version list</a> | <a target="_blank" href="api/transform?transformation=2&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false">Sample request</a>
+
+<h4>#3: ABCD (archive) > DarwinCore Archive</h4>
+<p>This transformation will create a DarwinCore archive for an ABCD dataset. The source document can be a single ABCD file storing one dataset (parameter <i>input_file_zipped</i> = true) or an ABCD archive containing multiple documents (<i>input_file_zipped</i> = false). If the source file is an ABCD archive, the transformation can take some time to run - a rough estimation is one minute for 100,000 records.<br>
+The result file will be a zipped DarwinCore archive with an <i>occurrence.txt</i> core file, a descriptor file <i>meta.xml</i> and an EML document <i>eml.xml</i>. In addition, in case the respective fields are present in the ABCD documents, there might be two extension files <i>identification.txt</i> and <i>multimedia.txt</i>.<br>
+<a target="_blank" href="api/transformations/3">Version list</a> | <a target="_blank" href="api/transform?transformation=3&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false">Sample request for single ABCD document</a> | <a target="_blank" href="api/transform?transformation=3&input_file_url=http://ww3.bgbm.org/tmp/test.zip&&input_file_zipped=true">Sample request for ABCD archive</a>
+<br>&nbsp;</p>
+
+</div>
+
+<hr>
+
+<div class="footer">
+    <div class="container" style="margin:0">
+		<a href="https://www.gfbio.org">GFBio Website</a> |
+		<a href="https://submissions.gfbio.org">Data Submission</a> |
+		<a href="https://helpdesk.gfbio.org">Help Desk</a> |
+		<a href="https://vat.gfbio.org">VAT</a> |
+		<a href="https://terminologies.gfbio.org">Terminology Service</a> |
+		<a href="mailto:info@gfbio.org">info@gfbio.org</a> |
+		<a href="https://www.gfbio.org/legal-notice">Legal Notice</a>
+    </div>
+</div>
+</p>
+
+</body>
+</html>

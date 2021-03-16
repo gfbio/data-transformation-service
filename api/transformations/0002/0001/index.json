@@ -1,0 +1,11 @@
+{"version": {
+    "version_comment": "initial version",
+	"version_date": "2019-03-12",
+	"title": "ABCD HTML landing page",
+	"description": "converts ABCD 2.06 format to an HTML dataset landingpage",
+	"input_format": "ABCD 2.06",
+	"output_format": "HTML",
+	"files": ["abcd_2.06_dataset_landingpage.xslt"],
+	"engine": "xslt",
+	"xslt_processor": "saxon"
+}}
