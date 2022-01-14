@@ -231,11 +231,14 @@ if($service == "transformations"){
 		$job_json["job"]["start_time"] = date("c");
 		
 		
-		if($transformation_json["version"]["engine"]=="xslt"){
+		if($transformation_json["version"]["engine"]=="xslt")
 			$job_json = xslt_transformation($job_json,$transformation_json);
-		}else if($transformation_json["version"]["engine"]=="pdi"){
-			$job_json = dwca_transformation($job_json,$transformation_json);
-		}else{
+		else if($transformation_json["version"]["engine"]=="pdi")
+			if($transformation_json["version"]["input_format"]=="ABCD 2.06")
+				$job_json = dwca_transformation($job_json,$transformation_json);
+			else
+				$job_json = cdmlight_transformation($job_json,$transformation_json);
+		else{
 			//ToDo error: unsupported engine
 			//remove directory?
 			//

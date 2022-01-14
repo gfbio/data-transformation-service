@@ -1,3 +1,5 @@
+https://transformation.gfbio.org/api/transform?transformation=4&input_file_url=http://ww3.bgbm.org/tmp/test_cdmlight.zip
+
 http://data-transformation.gfbio.org/api/transform?transformation=2&version=1&input_file_url=http%3A%2F%2Fdata-transformation.gfbio.org%2Fapi%2Fdemo-data%2Fbgbm_herbarium.xml
 
 https://dev-gfbio.bgbm.org/tools/dts-demo/api/transform?transformation=3&version=1&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false

@@ -52,6 +52,11 @@ A transformation job can be initiated using the <i>transform</i> service, which 
 <p>This transformation will create a DarwinCore archive for an ABCD dataset. The source document can be a single ABCD file storing one dataset (parameter <i>input_file_zipped</i> = true) or an ABCD archive containing multiple documents (<i>input_file_zipped</i> = false). If the source file is an ABCD archive, the transformation can take some time to run - a rough estimation is one minute for 100,000 records.<br>
 The result file will be a zipped DarwinCore archive with an <i>occurrence.txt</i> core file, a descriptor file <i>meta.xml</i> and an EML document <i>eml.xml</i>. In addition, in case the respective fields are present in the ABCD documents, there might be three extension files <i>identification.txt</i>, <i>multimedia.txt</i> and <i>measurementorfact</i>.<br>
 <a target="_blank" href="api/transformations/3">Version list</a> | <a target="_blank" href="api/transform?transformation=3&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false">Sample request for single ABCD document</a> | <a target="_blank" href="api/transform?transformation=3&input_file_url=http://ww3.bgbm.org/tmp/test.zip&&input_file_zipped=true">Sample request for ABCD archive</a>
+
+<h4>#4: CDM Light > PANGAEA PanSimple</h4>
+<p>This transformation will convert a checklist from CDM Light into the PANGAEA PanSimple format.<br>
+The result file will be a zipped DarwinCore archive with an <i>occurrence.txt</i> core file, a descriptor file <i>meta.xml</i> and an EML document <i>eml.xml</i>. In addition, in case the respective fields are present in the ABCD documents, there might be three extension files <i>identification.txt</i>, <i>multimedia.txt</i> and <i>measurementorfact</i>.<br>
+<a target="_blank" href="api/transformations/4">Version list</a> | <a target="_blank" href="api/transform?transformation=4&input_file_url=http://ww3.bgbm.org/tmp/test_cdmlight.zip">Sample request</a>
 <br>&nbsp;</p>
 
 </div>

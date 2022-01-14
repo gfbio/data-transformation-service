@@ -2,7 +2,7 @@
 
 #include("utils.php");
 $log = array();
-	
+
 function dwca_transformation($job_json, $transformation_json){
 	global $log;
 	$padding_width = 4;
@@ -84,6 +84,49 @@ function dwca_transformation($job_json, $transformation_json){
 		add_log("Done.");
 
 		// Set result JSON
+		$job_json["job"]["status"] = "complete";
+		$job_json["job"]["result_file"] = $result_file;
+	}
+
+	catch (Exception $e) {
+		$job_json["job"]["status"] = "failed";
+		add_log($e->getMessage(), 'ERROR');
+		$job_json["job"]["error_message"] = $e->getMessage(); 
+	}
+
+	finally {
+		// Add log to JSON and return it
+		$job_json["job"]["log"] = $log;
+		return $job_json;
+	}
+}
+
+function cdmlight_transformation($job_json, $transformation_json){
+	global $log;
+	$padding_width = 4;
+
+	// Get job & trafo parameters and fill in some paths
+	$job_id = $job_json["job"]["job_id"];
+	$transformation_id_padded = str_pad($transformation_json["version"]["transformation_id"], $padding_width, '0', STR_PAD_LEFT);
+	$version_id_padded = str_pad($transformation_json["version"]["version_id"], $padding_width, '0', STR_PAD_LEFT);
+	$kjbFile = "transformations/".$transformation_id_padded."/".$version_id_padded."/".$transformation_json["version"]["files"][0];
+	$input_file = $job_json["job"]["input_file"];
+	$result_file = "results/" . $job_id . "/output/pansimple.zip";
+	$path = getcwd() . "/results/" . $job_id;
+	
+	try {
+		// Invoke through launcher jar (different from dwca handling); use Pentaho 7, not 4
+		$cmd = "/var/lib/pdi7/kitchen.sh -level=Minimal -file=" . $kjbFile .
+			" -param:path=" . $path . " -param:source_file=" . $input_file;
+		add_log("Transforming ". $input_file);
+		add_log($cmd);
+		add_log("Starting PDI transformation...");
+		exec($cmd, $log, $ret);
+		if ($ret)
+			throw new Exception('PDI call failed with error code ' . $ret); 
+
+		// Set result JSON
+		add_log("Done.");
 		$job_json["job"]["status"] = "complete";
 		$job_json["job"]["result_file"] = $result_file;
 	}
@@ -335,16 +378,12 @@ function meta_snippet($file, $version_id_padded) {
 	
 // Manual testing
 /*$job["job"]["job_id"] = "test";
-$job["transformation_id"] = 3;
+$job["transformation_id"] = 4;
 $job["version_id"] = 1;
-$job["job"]["input_file"] = "input/bgbm_herbarium_small.xml";
-$job["job"]["input_file_zipped"] = false;
-//$job["job"]["input_file"] = "input/test.zip";
-//$job["job"]["input_file_zipped"] = true;
+$job["job"]["input_file"] = "cdm_light.zip";
 
-$trafo["version"] = ["transformation_id" => 3, "version_id" => 1, "files" => ["dwca.kjb", "abcd2.ktr"]];
+$trafo["version"] = ["transformation_id" => 4, "version_id" => 1, "files" => ["parent.kjb"]];
 
 
 print_r($job); print_r($trafo);
-print_r(dwca_transformation($job, $trafo));
-*/
+print_r(cdmlight_transformation($job, $trafo));*/

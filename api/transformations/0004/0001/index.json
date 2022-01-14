@@ -1,0 +1,10 @@
+{"version": {
+    "version_comment": "initial version",
+	"version_date": "2022-01-12",
+	"title": "CDM Light to PanSimple Transformation",
+	"description": "converts CDM Light format to PanSimple",
+	"input_format": "CDM Light",
+	"output_format": "PanSimple",
+	"files": ["parent.kjb"],
+	"engine": "pdi"
+}}
