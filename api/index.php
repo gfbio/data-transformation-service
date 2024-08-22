@@ -233,6 +233,8 @@ if($service == "transformations"){
 		
 		if($transformation_json["version"]["engine"]=="xslt")
 			$job_json = xslt_transformation($job_json,$transformation_json);
+		else if($transformation_json["version"]["engine"]=="python")
+			$job_json = python_transformation($job_json,$transformation_json);
 		else if($transformation_json["version"]["engine"]=="pdi")
 			if($transformation_json["version"]["input_format"]=="ABCD 2.06")
 				$job_json = dwca_transformation($job_json,$transformation_json);
@@ -301,6 +303,23 @@ if($service == "transformations"){
 }else{
 	http_response_code (404);
 	echo "unknonwn service";
+}
+
+function python_transformation($job_json,$transformation_json){
+	$padding_width = 4;
+	$job_json["job"]["status"] = "complete";
+	$job_json["job"]["result_file"] = "output/result.xml";
+	
+	$transformation_id_padded = str_pad($transformation_json["version"]["transformation_id"], $padding_width, '0', STR_PAD_LEFT);
+	$version_id_padded = str_pad($transformation_json["version"]["version_id"], $padding_width, '0', STR_PAD_LEFT);
+	$python_file = "transformations/".$transformation_id_padded."/".$version_id_padded."/".$transformation_json["version"]["files"][0];
+	$input_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["input_file"];
+	$result_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["result_file"];
+
+	$command = "python ".$python_file." ".$input_file." ".$result_file;
+	shell_exec($command);
+
+	return $job_json;
 }
 
 function xslt_transformation($job_json,$transformation_json){

@@ -1,6 +1,12 @@
+# std
+import sys
+import json
+# 3rd party
 import saxonche as saxon
 from saxonche import PySaxonProcessor
-import xmltodict, json
+import xmltodict
+
+
 
 def convert_values(schema_dict):
     try:
@@ -23,6 +29,7 @@ def convert_values(schema_dict):
 
     except KeyError:
         pass
+
 
 def export_json(schema_dict):
     schema_json = json.dumps(schema_dict['jsonld'])
@@ -54,11 +61,15 @@ def transform(xml):
 
     return export_json(schema_dict)
 
-
+# call from php is 'python abcd2bioschemas-search.py $input_file $output_location'
 def main():
-    xml = "abcd2bioschemas.xml"
-    print(test(xml))
+    input_file = sys.argv[1]
+    output_location = sys.argv[2]
 
+    result = transform(input_file)
+
+    with open(output_location, 'w') as f:
+        f.write(result)
 
 if __name__ == "__main__":
     main()
