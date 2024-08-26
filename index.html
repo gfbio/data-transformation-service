@@ -42,22 +42,28 @@ A transformation job can be initiated using the <i>transform</i> service, which 
 
 <h4>#1: ABCD > PANGAEA PanSimple</h4>
 <p>Transforms a single ABCD document into a PanSimple document, which is used for harvesting purposes in the PANGAEA project.<br>
-<a target="_blank" href="api/transformations/1">Version list</a> | <a target="_blank" href="api/transform?transformation=1&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false">Sample request</a>
+<a target="_blank" href="api/transformations/1">Version list</a> | <a target="_blank" href="api/transform?transformation=1&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false" rel="nofollow">Sample request</a>
 
 <h4>#2: ABCD > HTML Landing Page</h4>
 <p>Transforms a single ABCD document into a human-readable description of the dataset stored in the document. The page generated contains the dataset's metadata (such as title, description, contacts, taxonomic and geographic scope) and lists the individual records with their catalog number and scientific identification result. If the ABCD field RecordURI is filled, the detailed record pages are linked.<br>
-<a target="_blank" href="api/transformations/2">Version list</a> | <a target="_blank" href="api/transform?transformation=2&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false">Sample request</a>
+<a target="_blank" href="api/transformations/2">Version list</a> | <a target="_blank" href="api/transform?transformation=2&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false" rel="nofollow">Sample request</a>
 
 <h4>#3: ABCD (archive) > DarwinCore Archive</h4>
 <p>This transformation will create a DarwinCore archive for an ABCD dataset. The source document can be a single ABCD file storing one dataset (parameter <i>input_file_zipped</i> = true) or an ABCD archive containing multiple documents (<i>input_file_zipped</i> = false). If the source file is an ABCD archive, the transformation can take some time to run - a rough estimation is one minute for 100,000 records.<br>
 The result file will be a zipped DarwinCore archive with an <i>occurrence.txt</i> core file, a descriptor file <i>meta.xml</i> and an EML document <i>eml.xml</i>. In addition, in case the respective fields are present in the ABCD documents, there might be three extension files <i>identification.txt</i>, <i>multimedia.txt</i> and <i>measurementorfact</i>.<br>
-<a target="_blank" href="api/transformations/3">Version list</a> | <a target="_blank" href="api/transform?transformation=3&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false">Sample request for single ABCD document</a> | <a target="_blank" href="api/transform?transformation=3&input_file_url=http://ww3.bgbm.org/tmp/test.zip&&input_file_zipped=true">Sample request for ABCD archive</a>
+<a target="_blank" href="api/transformations/3">Version list</a> | <a target="_blank" href="api/transform?transformation=3&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false" rel="nofollow">Sample request for single ABCD document</a> | <a target="_blank" href="api/transform?transformation=3&input_file_url=http://ww3.bgbm.org/tmp/test.zip&&input_file_zipped=true" rel="nofollow">Sample request for ABCD archive</a>
 
 <h4>#4: CDM Light > PANGAEA PanSimple</h4>
 <p>This transformation will convert a checklist from <a href="https://data.bgbm.org/dataset/gfbio/0027/Manual-EDIT-Platform-Appendix-CDM-Light-2.04.pdf" target="_blank">CDM Light</a> into the PANGAEA PanSimple format.<br>
 The result file will be a zipped DarwinCore archive with an <i>occurrence.txt</i> core file, a descriptor file <i>meta.xml</i> and an EML document <i>eml.xml</i>. In addition, in case the respective fields are present in the ABCD documents, there might be three extension files <i>identification.txt</i>, <i>multimedia.txt</i> and <i>measurementorfact</i>.<br>
-<a target="_blank" href="api/transformations/4">Version list</a> | <a target="_blank" href="api/transform?transformation=4&input_file_url=http://ww3.bgbm.org/tmp/test_cdmlight.zip">Sample request</a>
+<a target="_blank" href="api/transformations/4">Version list</a> | <a target="_blank" href="api/transform?transformation=4&input_file_url=http://ww3.bgbm.org/tmp/test_cdmlight.zip" rel="nofollow">Sample request</a>
+
+<!-- ABCD2BS
+<h4>#5: ABCD > BioSchemas Search File</h4>
+<p>This transformation converts a single ABCD document into a BioSchemas file representing the dataset. This file is a reduced and summarized version of the ABCD document(s), containing only metadata that is relevant for search engines. <br> 
+<a target="_blank" href="api/transformations/5">Version list</a> | <a target="_blank" href="api/transform?transformation=5&input_file_url=http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml&input_file_zipped=false" rel="nofollow">Sample request</a>
 <br>&nbsp;</p>
+-->
 
 </div>
 
