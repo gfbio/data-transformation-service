@@ -218,6 +218,7 @@ if($service == "transformations"){
 		//error_log(rawurlencode($input_file_url));
 		
 		// Download input file
+		// TODO: Check for file size
 		$input_file_content = file_get_contents($url . rawurlencode($input_file_name));
 		if ($input_file_content)
 			file_put_contents("results/".$job_id."/".$job_json["job"]["input_file"],$input_file_content);
@@ -316,7 +317,9 @@ function python_transformation($job_json,$transformation_json){
 	$input_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["input_file"];
 	$result_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["result_file"];
 
+	//TODO: Specify python version in configuration
 	$command = "python ".$python_file." ".$input_file." ".$result_file;
+	//TODO: Execute command without waiting for it to finish
 	shell_exec($command);
 
 	return $job_json;
