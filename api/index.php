@@ -314,11 +314,12 @@ function python_transformation($job_json,$transformation_json){
 	$transformation_id_padded = str_pad($transformation_json["version"]["transformation_id"], $padding_width, '0', STR_PAD_LEFT);
 	$version_id_padded = str_pad($transformation_json["version"]["version_id"], $padding_width, '0', STR_PAD_LEFT);
 	$python_file = "transformations/".$transformation_id_padded."/".$version_id_padded."/".$transformation_json["version"]["files"][0];
+	$style_file = "transformations/".$transformation_id_padded."/".$version_id_padded."/".$transformation_json["version"]["files"][1];
 	$input_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["input_file"];
 	$result_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["result_file"];
-
+	
 	//TODO: Specify python version in configuration
-	$command = "python ".$python_file." ".$input_file." ".$result_file;
+	$command = "python3 ".$python_file." ".$input_file." ".$result_file." ".$style_file;
 	//TODO: Execute command without waiting for it to finish
 	shell_exec($command);
 

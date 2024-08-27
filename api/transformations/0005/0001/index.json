@@ -6,6 +6,6 @@
 	"input_format": "ABCD 2.06",
 	"output_format": "BioSchemas",
 	"published": "hidden",
-	"files": ["abcd2bioschemas-search.py"],
+	"files": ["abcd2bioschemas-search.py", "abcd2bioschemas-search-xml.xslt"],
 	"engine": "python"
 }}

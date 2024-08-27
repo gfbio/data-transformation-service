@@ -30,6 +30,8 @@ def convert_values(schema_dict):
     except KeyError:
         pass
 
+    return schema_dict
+
 
 def export_json(schema_dict):
     schema_json = json.dumps(schema_dict['jsonld'])
@@ -37,9 +39,8 @@ def export_json(schema_dict):
     return schema_json
 
 
-def transform(xml):
+def transform(xml, stylesheet_file):
     input_file = xml
-    stylesheet_file = "abcd2bioschemas-xml.xslt"
 
     with PySaxonProcessor(license=False) as proc:
         xslt30proc = proc.new_xslt30_processor()
@@ -47,26 +48,30 @@ def transform(xml):
     try:
         schema_xml = xslt30proc.transform_to_string(source_file=input_file, stylesheet_file=stylesheet_file)
     except Exception as e:
+        print(e)
         schema_xml = None
 
     try:
         schema_dict = xmltodict.parse(schema_xml)
     except Exception as e:
+        print(e)
         schema_dict = None
 
     try:
         schema_dict = convert_values(schema_dict)
     except Exception as e:
+        print(e)
         schema_dict = None
 
     return export_json(schema_dict)
 
-# call from php is 'python abcd2bioschemas-search.py $input_file $output_location'
+# call from php is 'python abcd2bioschemas-search.py $input_file $output_location $stylesheet_file'
 def main():
     input_file = sys.argv[1]
     output_location = sys.argv[2]
+    stylesheet_file = sys.argv[3]
 
-    result = transform(input_file)
+    result = transform(input_file, stylesheet_file)
 
     with open(output_location, 'w') as f:
         f.write(result)
