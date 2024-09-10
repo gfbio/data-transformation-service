@@ -219,7 +219,12 @@ if($service == "transformations"){
 		
 		// Download input file
 		// TODO: Check for file size
-		$input_file_content = file_get_contents($url . rawurlencode($input_file_name));
+		$input_file_url = $url . rawurlencode($input_file_name);
+		if (!filter_var($input_file_url, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) && !filter_var($url, FILTER_VALIDATE_URL)) {
+			echo "Invalid URL";
+			return;
+		} 
+		$input_file_content = file_get_contents($input_file_url);
 		if ($input_file_content)
 			file_put_contents("results/".$job_id."/".$job_json["job"]["input_file"],$input_file_content);
 		
