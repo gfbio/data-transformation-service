@@ -334,7 +334,7 @@ function python_transformation($job_json,$transformation_json){
 	$result_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["result_file"];
 	
 	//TODO: Specify python version in configuration
-	$command = "python ".$python_file." ".$input_file." ".$result_file." ".$style_file;
+	$command = "python3 ".$python_file." ".$input_file." ".$result_file." ".$style_file;
 	//TODO: Execute command without waiting for it to finish
 	shell_exec($command);
 
