@@ -355,8 +355,10 @@ function xslt_transformation($job_json,$transformation_json){
 		//$job_json["job"]["error_count"] = $xsltProc->getExceptionCount();
 		//$job_json["job"]["error_message"] = $xsltProc->getErrorMessage(0);
 	}else{
-		$xmldoc = DOMDocument::loadXML(file_get_contents($input_file));
-		$xsldoc = DOMDocument::loadXML(file_get_contents($xsl_file));
+		$xmldoc = new DOMDocument();
+		$xmldoc->load($input_file);
+		$xsldoc = new DOMDocument();
+		$xsldoc->load($xsl_file);
 
 		$proc = new XSLTProcessor();
 		$proc->registerPHPFunctions();
