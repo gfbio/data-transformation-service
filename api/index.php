@@ -217,9 +217,24 @@ if($service == "transformations"){
 		error_log($url . rawurlencode($input_file_name));
 		//error_log(rawurlencode($input_file_url));
 		
-		// Download input file
-		// TODO: Check for file size
-		$input_file_content = file_get_contents($url . rawurlencode($input_file_name));
+		$input_file_url = $url . rawurlencode($input_file_name);
+		$input_file_content = file_get_contents($input_file_url);
+		$length = strlen($input_file_content);
+		if ($length == 0) {
+			//ToDo error handling
+			echo "Error: File not found";
+			return;
+		}
+		elseif ($length > 100000000) {
+			// ToDo error handling
+			echo "Error: File larger than 100MB";
+			return;
+		}
+		elseif ($job_json["job"]["transformation_id"] == "5" && substr($input_file_content, 0, 5) != "<?xml") {
+			//ToDo error handling
+			echo "Error: File is not XML";
+			return;
+		}
 		if ($input_file_content)
 			file_put_contents("results/".$job_id."/".$job_json["job"]["input_file"],$input_file_content);
 		
@@ -309,7 +324,7 @@ if($service == "transformations"){
 function python_transformation($job_json,$transformation_json){
 	$padding_width = 4;
 	$job_json["job"]["status"] = "complete";
-	$job_json["job"]["result_file"] = "output/result.xml";
+	$job_json["job"]["result_file"] = "output/result.json";
 	
 	$transformation_id_padded = str_pad($transformation_json["version"]["transformation_id"], $padding_width, '0', STR_PAD_LEFT);
 	$version_id_padded = str_pad($transformation_json["version"]["version_id"], $padding_width, '0', STR_PAD_LEFT);
