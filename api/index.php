@@ -217,7 +217,12 @@ if($service == "transformations"){
 		error_log($url . rawurlencode($input_file_name));
 		//error_log(rawurlencode($input_file_url));
 		
+
 		$input_file_url = $url . rawurlencode($input_file_name);
+		if (!filter_var($input_file_url, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) && !filter_var($url, FILTER_VALIDATE_URL)) {
+			echo "Invalid URL";
+			return;
+		} 
 		$input_file_content = file_get_contents($input_file_url);
 		$length = strlen($input_file_content);
 		if ($length == 0) {
