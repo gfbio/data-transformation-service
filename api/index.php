@@ -3,12 +3,21 @@
 
 include("utils.php");
 include("pdi.php");
+include("../config.php");
 
 $padding_width = 4;
 $service = get_url_parameter('service');
 
-//TODO check if exists
-//echo "service: '".$service."'";
+if(!in_array($service, $services)){
+	header('Content-Type: application/json; charset=utf-8');
+	http_response_code (404);
+	$output = array();
+	$output["error_code"] = 404;
+	$output["error_message"] = "Service not found";
+	$output["available_services"] = $services;
+	echo json_encode($output);
+	return;
+}
 
 if($service == "transformations"){
 	$transformation = get_url_parameter('transformation');
@@ -321,9 +330,6 @@ if($service == "transformations"){
 		http_response_code (404);
 		echo "unknonwn job";
 	}
-}else{
-	http_response_code (404);
-	echo "unknonwn service";
 }
 
 function python_transformation($job_json,$transformation_json){
