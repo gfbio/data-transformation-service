@@ -38,7 +38,16 @@ if($service == "transformations"){
 				header('Content-Type: application/json; charset=utf-8');
 				echo json_encode($json);
 			}else{
-				//ToDo Error handling, version does not exist
+				$latest_version_id_padded = get_latest_version($transformation_id_padded);
+				header('Content-Type: application/json; charset=utf-8');
+				http_response_code (404);
+				$output = array();
+				$output["error_code"] = 404;
+				$output["error_message"] = "Version not found";
+				$output["transformation"]["latest_version"] = array("transformation_id"=>ltrim($transformation, '0'),"version_id"=>ltrim($latest_version_id_padded, '0'));
+
+				echo json_encode($output);
+				return;
 			}
 					
 		}else if($filename != ""){
@@ -163,7 +172,15 @@ if($service == "transformations"){
 			if (file_exists($file)) {					
 				$transformation_file = $file;
 			}else{
-				//ToDo Error handling, version does not exist
+				$latest_version_id_padded = get_latest_version($transformation_id_padded);
+				header('Content-Type: application/json; charset=utf-8');
+				http_response_code (404);
+				$output = array();
+				$output["error_code"] = 404;
+				$output["error_message"] = "Version not found";
+				$output["transformation"]["latest_version"] = array("transformation_id"=>ltrim($transformation, '0'),"version_id"=>ltrim($latest_version_id_padded, '0'));
+
+				echo json_encode($output);
 				return;
 			}
 					
@@ -330,6 +347,21 @@ if($service == "transformations"){
 		http_response_code (404);
 		echo "unknonwn job";
 	}
+}
+
+function get_latest_version($transformation_id_padded){
+	$listing = array();
+	foreach (new DirectoryIterator("transformations/".$transformation_id_padded) as $fileInfo) {
+		if($fileInfo->isDir() && !$fileInfo->isDot() && $fileInfo->getFilename() != "." && $fileInfo->getFilename() != ".." ) {
+			$file = "transformations/".$transformation_id_padded."/".$fileInfo->getFilename()."/index.json";
+			if (file_exists($file)) {
+				$listing[] = $fileInfo->getFilename();
+			}
+		}
+	}
+	sort($listing);
+	$latest_version_id_padded = $listing[sizeof($listing)-1];
+	return $latest_version_id_padded;
 }
 
 function python_transformation($job_json,$transformation_json){
