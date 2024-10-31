@@ -51,7 +51,23 @@ if($service == "transformations"){
 			}
 					
 		}else if($filename != ""){
-			//ToDo get file
+			$filename = str_replace("\"","",$filename);
+			$version_id_padded = get_latest_version($transformation_id_padded);
+			$file = "transformations/".$transformation_id_padded."/".$version_id_padded."/".$filename;
+			if (file_exists($file)) {
+				$json = file_get_contents($file);
+				header('Content-Type: application/json; charset=utf-8');
+				echo $json;
+				return;
+			}else{
+				header('Content-Type: application/json; charset=utf-8');
+				http_response_code (404);
+				$output = array();
+				$output["error_code"] = 404;
+				$output["error_message"] = "File not found";
+				echo json_encode($output);
+				return;
+			}
 		}else{
 			$listing = array();
 			foreach (new DirectoryIterator($service."/".$transformation_id_padded) as $fileInfo) {
