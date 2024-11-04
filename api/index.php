@@ -63,8 +63,7 @@ if($service == "transformations"){
 						$string = file_get_contents($file);
 						$json = json_decode($string, true);
 						//ToDo deprecated tracking
-						//ToDo handle deprecated latest version separately
-						if(array_key_exists('published',$json) && ($json['published'] == "false" || $json['published'] == "hidden" )){
+						if(array_key_exists('published', $json['version']) && ($json['version']['published'] == "false" || $json['version']['published'] == "hidden" )){
 							continue;
 						}
 						
@@ -72,6 +71,16 @@ if($service == "transformations"){
 					}
 				}
 			}
+			if (sizeof($listing) == 0) {
+				header('Content-Type: application/json; charset=utf-8');
+				http_response_code (404);
+				$output = array();
+				$output["error_code"] = 404;
+				$output["error_message"] = "Transformation not found";
+				echo json_encode($output);
+				return;
+			}
+			
 			sort($listing);
 			$latest_version_id_padded = $listing[sizeof($listing)-1];
 			
@@ -124,7 +133,7 @@ if($service == "transformations"){
 						$string = file_get_contents($file);
 						$json = json_decode($string, true);
 						//ToDo deprecated tracking
-						if(array_key_exists('published',$json) && ($json['published'] == "false" || $json['published'] == "hidden" )){
+						if(array_key_exists('published', $json['version']) && ($json['version']['published'] == "false" || $json['version']['published'] == "hidden" )){
 							continue;
 						}
 						
@@ -132,10 +141,11 @@ if($service == "transformations"){
 					}
 				}
 			}
+			if (sizeof($version_listing) == 0) {
+				continue;
+			}
 			sort($version_listing);
 			$latest_version_id_padded = $version_listing[sizeof($version_listing)-1];
-
-			//ToDo if latest version is deprecated, deprecate transformation
 
 			$file = "transformations/".$transformation_id_padded."/".$latest_version_id_padded."/index.json";
 		
