@@ -22,7 +22,7 @@ if(!in_array($service, $services)){
 if($service == "transformations"){
 	$transformation = get_url_parameter('transformation');
 	$version = get_url_parameter('version');
-	if($transformation != ""){
+	if($transformation != "" && file_exists("transformations/".str_pad($transformation, $padding_width, '0', STR_PAD_LEFT))){
 		$filename = get_url_parameter('filename');
 		$transformation_id_padded = str_pad($transformation, $padding_width, '0', STR_PAD_LEFT);
 		
