@@ -315,8 +315,16 @@ if($service == "transformations"){
 				$job_json = cdmlight_transformation($job_json,$transformation_json);
 		else{
 			//ToDo error: unsupported engine
-			//remove directory?
-			//
+			error_log("Invocation of an unsupported engine: ".$transformation_json["version"]["engine"]." for transformation ".$transformation_json["version"]["transformation_id"]." version ".$transformation_json["version"]["version_id"])." in job ".$job_id;
+			header('Content-Type: application/json; charset=utf-8');
+			http_response_code (501);
+			$output = array();
+			$output["error_code"] = 501;
+			$output["error_message"] = "Engine not implemented";
+			echo json_encode($output);
+			return;
+			//remove directory
+			//rrmdir("results/".$job_id);
 		}
 		
 		// Remove tmp folder
