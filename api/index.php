@@ -272,7 +272,6 @@ if($service == "transformations"){
 		$input_file_url = $url . rawurlencode($input_file_name);
 		$input_file_url = str_replace("%3F", "?", $input_file_url);
 		$input_file_url = str_replace("%26", "&", $input_file_url);
-		echo $input_file_url;
 		if (!filter_var($input_file_url, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) && !filter_var($url, FILTER_VALIDATE_URL)) {
 			echo "Invalid URL";
 			return;
