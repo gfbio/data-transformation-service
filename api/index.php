@@ -22,10 +22,10 @@ if(!in_array($service, $services)){
 if($service == "transformations"){
 	$transformation = get_url_parameter('transformation');
 	$version = get_url_parameter('version');
-	if($transformation != ""){
+	if($transformation != "" && file_exists("transformations/".str_pad($transformation, $padding_width, '0', STR_PAD_LEFT))){
 		$filename = get_url_parameter('filename');
 		$transformation_id_padded = str_pad($transformation, $padding_width, '0', STR_PAD_LEFT);
-		
+
 		if($version != ""){
 			$version_padded = str_pad($version, $padding_width, '0', STR_PAD_LEFT);
 			$file = "transformations/".$transformation_id_padded."/".$version_padded."/index.json";
@@ -171,25 +171,29 @@ if($service == "transformations"){
 			$output["transformations"][] = $latest_version_content["version"];
 		}
 		
-		
 		header('Content-Type: application/json; charset=utf-8');
-		
 
 		echo json_encode($output);
-		//
 	}
 }else if($service == "transform"){
-	//get GET parameters
 	$transformation = get_url_parameter('transformation');
 	$version = get_url_parameter('version');
 	$input_file_url = get_url_parameter('input_file_url');
 	$input_file_zipped = get_url_parameter('input_file_zipped',"false");
 	//ToDo load additional custom parameters
 	//print_r($_GET);
-	//load transformation
 	
 	if($transformation != ""){
 		$transformation_id_padded = str_pad($transformation, $padding_width, '0', STR_PAD_LEFT);
+		if(!file_exists("transformations/".$transformation_id_padded)){
+			header('Content-Type: application/json; charset=utf-8');
+			http_response_code (404);
+			$output = array();
+			$output["error_code"] = 404;
+			$output["error_message"] = "Transformation ID not found";
+			echo json_encode($output);
+			return;
+		}
 		
 		if($version != ""){
 			$version_padded = str_pad($version, $padding_width, '0', STR_PAD_LEFT);
@@ -229,8 +233,12 @@ if($service == "transformations"){
 			
 		}
 	}else{
-		//to transformation specified
-		//ToDo warning
+		header('Content-Type: application/json; charset=utf-8');
+		http_response_code (404);
+		$output = array();
+		$output["error_code"] = 404;
+		$output["error_message"] = "No transformation ID specified";
+		echo json_encode($output);
 		return;
 	}
 	
