@@ -381,13 +381,21 @@ if ($method == 'GET') {
 } else if ($method == 'DELETE') {
 	if($service == "results"){
 		$job_id = get_url_parameter('job');
-		sleep(2);
-		rrmdir("results/".$job_id."/");
 		$output = array();
-		$output["job_id"] = $job_id;
-		$output["status"] = "deleted";
-		header('Content-Type: application/json; charset=utf-8');
-		echo json_encode($output);
+		if(!file_exists("results/".$job_id."/job.json")){
+			http_response_code (404);
+			$output["error_code"] = 404;
+			$output["error_message"] = "Job not found";
+			header('Content-Type: application/json; charset=utf-8');
+			echo json_encode($output);
+		}else{
+			sleep(2);
+			rrmdir("results/".$job_id."/");
+			$output["job_id"] = $job_id;
+			$output["status"] = "deleted";
+			header('Content-Type: application/json; charset=utf-8');
+			echo json_encode($output);
+		}
 	}
 } else {
 	http_response_code (405);
