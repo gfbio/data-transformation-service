@@ -9,5 +9,5 @@ RewriteRule ^transformations/(\d+)/(\d+)/?$ index.php?service=transformations&tr
 RewriteRule ^transformations/(\d+)/(\d+)/([^/]*)$ index.php?service=transformations&transformation=$1&version=$2&filename=$3 [L]
 RewriteRule ^transformations/(\d+)/([^/]*)$ index.php?service=transformations&transformation=$1&filename=$2 [L]
 RewriteRule ^results/(\d+)/?$ index.php?service=results&job=$1 [L]
-RewriteRule ^results/(\d+)/delete/?$ index.php?service=results&job=$1&task=delete [L]
+# RewriteRule ^results/(\d+)/delete/?$ index.php?service=results&job=$1&task=delete [L]
 </IfModule>
