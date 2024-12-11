@@ -1,0 +1,113 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Data Transformation Service API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/data-transformation-service/data-transformation-service/api",
+            "description": "Local server"
+        },
+        {
+            "url": "https://transformation.gfbio.org/api",
+            "description": "Production server"
+        }
+    ],
+    "paths": {
+        "/transformations": {
+            "get": {
+                "summary": "List available transformations",
+                "responses": {
+                    "200": {
+                        "description": "List of available transformations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Transformation"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "transformations"
+                ],
+                "parameters": [
+                    {
+                        "name": "transformation",
+                        "in": "paths",
+                        "description": "Transformation ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "query",
+                        "description": "Transformation version",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filename",
+                        "in": "query",
+                        "description": "Name of transformation file",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Transformation": {
+                "type": "object",
+                "properties": {
+                    "transformation_id": {
+                        "type": "string"
+                    },
+                    "version_id": {
+                        "type": "string"
+                    },
+                    "version_comment": {
+                        "type": "string"
+                    },
+                    "version_date": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "input_format": {
+                        "type": "string"
+                    },
+                    "output_format": {
+                        "type": "string"
+                    },
+                    "files": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "engine": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
