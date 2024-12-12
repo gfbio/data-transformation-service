@@ -24,10 +24,39 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Transformation"
-                                    }
+                                    "oneOf": [
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "transformations": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Transformation"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "transformation": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/TransformationID"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "version": {
+                                                    "type": "object",
+                                                    "$ref": "#/components/schemas/TransformationIDVersion"
+                                                }
+                                            }
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -66,15 +95,159 @@
                     }
                 ]
             }
+        },
+        "/transform": {
+            "get": {
+                "summary": "Transform data",
+                "responses": {
+                    "302": {
+                        "description": "Redirect",
+                        "headers": {
+                            "Location": {
+                                "description": "URL of the job",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "transform"
+                ],
+                "parameters": [
+                    {
+                        "name": "transformation",
+                        "in": "query",
+                        "description": "Transformation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "query",
+                        "description": "Transformation version",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "input_file_url",
+                        "in": "query",
+                        "description": "URL of input file",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "input_file_zipped",
+                        "in": "query",
+                        "description": "Input file is zipped",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        },
+                        "example": false
+                    }
+                ]
+            }
+        },
+        "/results": {
+            "get": {
+                "summary": "Return transformation job file",
+                "responses": {
+                    "200": {
+                        "description": "Transformation job file",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Results"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "results"
+                ],
+                "parameters": [
+                    {
+                        "name": "job",
+                        "in": "paths",
+                        "description": "Job ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            },
+            "delete": {
+                "summary": "Delete transformation job",
+                "responses": {
+                    "200": {
+                        "description": "Job deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "job": {
+                                            "type": "string"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Job not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error_code": {
+                                            "type": "integer"
+                                        },
+                                        "error_message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "results"
+                ],
+                "parameters": [
+                    {
+                        "name": "job",
+                        "in": "path",
+                        "description": "Job ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
-            "Transformation": {
+            "TransformationIDVersion": {
                 "type": "object",
                 "properties": {
                     "transformation_id": {
-                        "type": "string"
+                            "type": "string"
                     },
                     "version_id": {
                         "type": "string"
@@ -105,6 +278,102 @@
                     },
                     "engine": {
                         "type": "string"
+                    }
+                }
+            },
+            "TransformationID": {
+                "type": "object",
+                "properties": {
+                    "transformation_id": {
+                        "type": "string"
+                    },
+                    "version_comment": {
+                        "type": "string"
+                    },
+                    "version_date": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "input_format": {
+                        "type": "string"
+                    },
+                    "output_format": {
+                        "type": "string"
+                    },
+                    "files": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "engine": {
+                        "type": "string"
+                    },
+                    "versions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TransformationIDVersion"
+                        }
+                    }
+                }
+            },
+            "Transformation":{
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/TransformationIDVersion"
+                }
+            },
+            "Results": {
+                "type": "object",
+                "properties": {
+                    "job": {
+                        "type": "object",
+                        "properties": {
+                            "job_id": {
+                                "type": "string"
+                            },
+                            "transformation_id": {
+                                "type": "string"
+                            },
+                            "version_id": {
+                                "type": "string"
+                            },
+                            "input_file_url": {
+                                "type": "string"
+                            },
+                            "input_file_zipped": {
+                                "type": "boolean"
+                            },
+                            "query": {
+                                "type": "string"
+                            },
+                            "input_file": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "string"
+                            },
+                            "start_time": {
+                                "type": "string"
+                            },
+                            "result_file": {
+                                "type": "string"
+                            },
+                            "finish_time": {
+                                "type": "string"
+                            },
+                            "combined_download":{ 
+                                "type": "string"
+                            },
+                            "job_expiration_date": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             }
