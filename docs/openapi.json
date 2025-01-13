@@ -129,13 +129,12 @@
             "get": {
                 "summary": "Transform data",
                 "responses": {
-                    "302": {
-                        "description": "Redirect",
-                        "headers": {
-                            "Location": {
-                                "description": "URL of the job",
+                    "200": {
+                        "description": "Transformation job file",
+                        "content": {
+                            "application/json": {
                                 "schema": {
-                                    "type": "string"
+                                    "$ref": "#/components/schemas/Results"
                                 }
                             }
                         }
@@ -178,13 +177,13 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
-                        }
+                        },
+                        "example": 5
                     },
                     {
                         "name": "version",
                         "in": "query",
                         "description": "Transformation version",
-                        "required": true,
                         "schema": {
                             "type": "integer"
                         }
@@ -196,7 +195,8 @@
                         "required": true,
                         "schema": {
                             "type": "string"
-                        }
+                        },
+                        "example": "http://ww3.bgbm.org/tmp/bgbm_herbarium_small.xml"
                     },
                     {
                         "name": "input_file_zipped",
