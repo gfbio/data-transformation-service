@@ -242,8 +242,8 @@ function meta_snippet($file, $version_id_padded) {
         <field index="1" term="http://rs.tdwg.org/dwc/terms/institutionCode"/>
         <field index="2" term="http://rs.tdwg.org/dwc/terms/collectionCode"/>
         <field index="3" term="http://rs.tdwg.org/dwc/terms/basisOfRecord"/>
-        <field index="4" term="http://rs.tdwg.org/dwc/terms/occurrenceID"/>
-        <field index="5" term="http://rs.tdwg.org/dwc/terms/occurrenceStatus"/>
+        <field index="4" term="http://rs.tdwg.org/dwc/terms/occurrenceStatus"/>
+        <field index="5" term="http://rs.tdwg.org/dwc/terms/occurrenceID"/>
         <field index="6" term="http://rs.tdwg.org/dwc/terms/recordNumber"/>
         <field index="7" term="http://purl.org/dc/terms/modified"/>
         <field index="8" term="http://rs.tdwg.org/dwc/terms/recordedBy"/>
