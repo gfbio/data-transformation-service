@@ -46,7 +46,9 @@ if ($method == 'GET') {
 					$output = array();
 					$output["error_code"] = 404;
 					$output["error_message"] = "Version not found";
-					$output["transformation"]["latest_version"] = array("transformation_id"=>ltrim($transformation, '0'),"version_id"=>ltrim($latest_version_id_padded, '0'));
+					if ($latest_version_id_padded != "0000") {
+						$output["transformation"]["latest_version"] = array("transformation_id"=>ltrim($transformation, '0'),"version_id"=>ltrim($latest_version_id_padded, '0'));
+					}
 
 					echo json_encode($output);
 					return;
@@ -94,7 +96,7 @@ if ($method == 'GET') {
 					http_response_code (404);
 					$output = array();
 					$output["error_code"] = 404;
-					$output["error_message"] = "Transformation not found";
+					$output["error_message"] = "No valid version found";
 					echo json_encode($output);
 					return;
 				}
@@ -199,21 +201,23 @@ if ($method == 'GET') {
 			
 			if($version != ""){
 				$version_padded = str_pad($version, $padding_width, '0', STR_PAD_LEFT);
-				$file = "transformations/".$transformation_id_padded."/".$version_padded."/index.json";
-
-				if (file_exists($file)) {					
-					$transformation_file = $file;
-				}else{
-					$latest_version_id_padded = get_latest_version($transformation_id_padded);
+				$latest_version_id_padded = get_latest_version($transformation_id_padded);
+				if ($version_padded != $latest_version_id_padded) {
 					header('Content-Type: application/json; charset=utf-8');
 					http_response_code (404);
 					$output = array();
 					$output["error_code"] = 404;
 					$output["error_message"] = "Version not found";
-					$output["transformation"]["latest_version"] = array("transformation_id"=>ltrim($transformation, '0'),"version_id"=>ltrim($latest_version_id_padded, '0'));
-
+					if ($latest_version_id_padded != "0000") {
+						$output["transformation"]["latest_version"] = array("transformation_id"=>ltrim($transformation, '0'),"version_id"=>ltrim($latest_version_id_padded, '0'));
+					}
 					echo json_encode($output);
 					return;
+				}
+				$file = "transformations/".$transformation_id_padded."/".$version_padded."/index.json";
+
+				if (file_exists($file)) {					
+					$transformation_file = $file;
 				}
 						
 			}else{
@@ -221,11 +225,23 @@ if ($method == 'GET') {
 				foreach (new DirectoryIterator("transformations/".$transformation_id_padded) as $fileInfo) {
 					if($fileInfo->isDir() && !$fileInfo->isDot() && $fileInfo->getFilename() != "." && $fileInfo->getFilename() != ".." ) {
 						$file = "transformations/".$transformation_id_padded."/".$fileInfo->getFilename()."/index.json";
-
+						$json = json_decode(file_get_contents($file), true);
+						if(array_key_exists('published', $json['version']) && ($json['version']['published'] == "false" || $json['version']['published'] == "hidden" )){
+							continue;
+						}
 						if (file_exists($file)) {
 							$listing[] = $fileInfo->getFilename();
 						}
 					}
+				}
+				if (sizeof($listing) == 0) {
+					header('Content-Type: application/json; charset=utf-8');
+					http_response_code (404);
+					$output = array();
+					$output["error_code"] = 404;
+					$output["error_message"] = "No valid version found";
+					echo json_encode($output);
+					return;
 				}
 				sort($listing);
 				$latest_version_id_padded = $listing[sizeof($listing)-1];
@@ -364,15 +380,16 @@ if ($method == 'GET') {
 			file_put_contents("results/".$job_id."/job.json",json_encode($job_json));
 			header("Location: results/".$job_id."/");
 		}else{
-			//ToDo error handling
+			header('Content-Type: application/json; charset=utf-8');
+			http_response_code (404);
+			$output = array("error_code"=>404, "error_message" => "Transformation failed");
+			echo json_encode($output);
 			return;
 		}
-		
 
-		//check for engine, pass to engine
 		return;
 		
-	}else if($service == "results"){
+	} else if($service == "results"){
 		$job_id = get_url_parameter('job');
 		$task = get_url_parameter('task');
 		if(file_exists("results/".$job_id."/job.json")){
@@ -415,11 +432,21 @@ function get_latest_version($transformation_id_padded){
 		if($fileInfo->isDir() && !$fileInfo->isDot() && $fileInfo->getFilename() != "." && $fileInfo->getFilename() != ".." ) {
 			$file = "transformations/".$transformation_id_padded."/".$fileInfo->getFilename()."/index.json";
 			if (file_exists($file)) {
-				$listing[] = $fileInfo->getFilename();
+				$string = file_get_contents($file);
+				$json = json_decode($string, true);
+				if (array_key_exists('published', $json['version']) && ($json['version']['published'] == "false" || $json['version']['published'] == "hidden")) {
+					continue;
+				}
+				else {
+					$listing[] = $fileInfo->getFilename();
+				}
 			}
 		}
 	}
 	sort($listing);
+	if (sizeof($listing) == 0) {
+		return "0000";
+	}
 	$latest_version_id_padded = $listing[sizeof($listing)-1];
 	return $latest_version_id_padded;
 }
