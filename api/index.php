@@ -17,6 +17,7 @@ if(!in_array($service, $services)){
 	$output["error_message"] = "Service not found";
 	$output["available_services"] = $services;
 	echo json_encode($output);
+	error_log("Service not found: ".$service);
 	return;
 }
 
@@ -49,8 +50,8 @@ if ($method == 'GET') {
 					if ($latest_version_id_padded != "0000") {
 						$output["transformation"]["latest_version"] = array("transformation_id"=>ltrim($transformation, '0'),"version_id"=>ltrim($latest_version_id_padded, '0'));
 					}
-
 					echo json_encode($output);
+					error_log("Version not found: ".$version." for transformation ".$transformation);
 					return;
 				}
 						
@@ -70,6 +71,7 @@ if ($method == 'GET') {
 					$output["error_code"] = 404;
 					$output["error_message"] = "File not found";
 					echo json_encode($output);
+					error_log("File not found: ".$filename." for transformation ".$transformation);
 					return;
 				}
 			}else{
@@ -98,6 +100,7 @@ if ($method == 'GET') {
 					$output["error_code"] = 404;
 					$output["error_message"] = "No valid version found";
 					echo json_encode($output);
+					error_log("No valid version found for transformation ".$transformation);
 					return;
 				}
 				
@@ -196,6 +199,7 @@ if ($method == 'GET') {
 				$output["error_code"] = 404;
 				$output["error_message"] = "Transformation ID not found";
 				echo json_encode($output);
+				error_log("Transformation ID not found: ".$transformation);
 				return;
 			}
 			
@@ -212,6 +216,7 @@ if ($method == 'GET') {
 						$output["transformation"]["latest_version"] = array("transformation_id"=>ltrim($transformation, '0'),"version_id"=>ltrim($latest_version_id_padded, '0'));
 					}
 					echo json_encode($output);
+					error_log("Version not found: ".$version." for transformation ".$transformation);
 					return;
 				}
 				$file = "transformations/".$transformation_id_padded."/".$version_padded."/index.json";
@@ -241,14 +246,13 @@ if ($method == 'GET') {
 					$output["error_code"] = 404;
 					$output["error_message"] = "No valid version found";
 					echo json_encode($output);
+					error_log("No valid version found for transformation ".$transformation);
 					return;
 				}
 				sort($listing);
 				$latest_version_id_padded = $listing[sizeof($listing)-1];
 				$version = $latest_version_id_padded;
-				
 				$transformation_file = "transformations/".$transformation_id_padded."/".$latest_version_id_padded."/index.json";
-				
 			}
 		}else{
 			header('Content-Type: application/json; charset=utf-8');
@@ -257,6 +261,7 @@ if ($method == 'GET') {
 			$output["error_code"] = 404;
 			$output["error_message"] = "No transformation ID specified";
 			echo json_encode($output);
+			error_log("No transformation ID specified");
 			return;
 		}
 		
@@ -285,43 +290,58 @@ if ($method == 'GET') {
 			$job_json["job"]["input_file_url"] = $input_file_url;
 			$job_json["job"]["input_file_zipped"] = $input_file_zipped;
 			$job_json["job"]["query"] = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-			//ToDo error handling urls with parameters or slash at the end
 			$input_file_name = substr($input_file_url, strrpos($input_file_url,"/")+1);
 			$url = substr($input_file_url, 0, strrpos($input_file_url,"/")+1);
 			$job_json["job"]["input_file"] = "input/".$input_file_name;
-			//error_log($url);
-			//error_log($input_file_name, 0);
-			//error_log($input_file_url, 0);
 			error_log($url . rawurlencode($input_file_name));
-			//error_log(rawurlencode($input_file_url));
 			
 			$input_file_url = $url . rawurlencode($input_file_name);
 			$input_file_url = str_replace("%3F", "?", $input_file_url);
 			$input_file_url = str_replace("%26", "&", $input_file_url);
 			if (!filter_var($input_file_url, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) && !filter_var($url, FILTER_VALIDATE_URL)) {
-				echo "Invalid URL";
+				header('Content-Type: application/json; charset=utf-8');
+				http_response_code (404);
+				$output = array();
+				$output["error_code"] = 404;
+				$output["error_message"] = "Invalid URL";
+				echo json_encode($output);
+				error_log("Invalid URL: ".$input_file_url);
 				return;
 			}
 			$input_file_content = @file_get_contents($input_file_url);
 			$length = strlen($input_file_content);
 			if ($length == 0) {
-				//ToDo error handling
-				echo "Error: File not found";
+				header('Content-Type: application/json; charset=utf-8');
+				http_response_code (404);
+				$output = array();
+				$output["error_code"] = 404;
+				$output["error_message"] = "File not found";
+				echo json_encode($output);
+				error_log("File not found: ".$input_file_url);
 				return;
 			}
 			elseif ($length > 100000000) {
-				// ToDo error handling
-				echo "Error: File larger than 100MB";
+				header('Content-Type: application/json; charset=utf-8');
+				http_response_code (404);
+				$output = array();
+				$output["error_code"] = 404;
+				$output["error_message"] = "File larger than 100MB";
+				echo json_encode($output);
+				error_log("File larger than 100MB: ".$input_file_url);
 				return;
 			}
 			elseif ($job_json["job"]["transformation_id"] == "5" && substr($input_file_content, 0, 5) != "<?xml") {
-				//ToDo error handling
-				echo "Error: File is not XML";
+				header('Content-Type: application/json; charset=utf-8');
+				http_response_code (404);
+				$output = array();
+				$output["error_code"] = 404;
+				$output["error_message"] = "File format is not XML";
+				echo json_encode($output);
+				error_log("File format is not XML: ".$input_file_url);
 				return;
 			}
 			if ($input_file_content)
 				file_put_contents("results/".$job_id."/".$job_json["job"]["input_file"],$input_file_content);
-			
 			foreach ($_GET as $parameter => $value) {
 				if(substr($parameter,0,1)=="_"){
 					$job_json["job"]["parameters"][substr($parameter,1)] = $value;
@@ -349,6 +369,7 @@ if ($method == 'GET') {
 			  $output["error_code"] = 501;
 			  $output["error_message"] = "Engine not implemented";
 			  echo json_encode($output);
+			  error_log("Engine not implemented: ".$transformation_json["version"]["engine"]);
 			  return;
 			}
 			
@@ -384,6 +405,7 @@ if ($method == 'GET') {
 			http_response_code (404);
 			$output = array("error_code"=>404, "error_message" => "Transformation failed");
 			echo json_encode($output);
+			error_log("Transformation failed for an unknown reason: ".$transformation . " version ".$version);
 			return;
 		}
 
@@ -397,9 +419,13 @@ if ($method == 'GET') {
 			header('Content-Type: application/json; charset=utf-8');
 			echo $string;
 		}else{
-			//ToDo 404: unknown job
+			header('Content-Type: application/json; charset=utf-8');
 			http_response_code (404);
-			echo "unknonwn job";
+			$output = array();
+			$output["error_code"] = 404;
+			$output["error_message"] = "Job not found";
+			error_log("Job not found: ".$job_id);
+			echo json_encode($output);
 		}
 	}
 } else if ($method == 'DELETE') {
@@ -411,6 +437,7 @@ if ($method == 'GET') {
 			$output["error_code"] = 404;
 			$output["error_message"] = "Job not found";
 			header('Content-Type: application/json; charset=utf-8');
+			error_log("Job not found: ".$job_id);
 			echo json_encode($output);
 		}else{
 			sleep(2);
@@ -423,7 +450,12 @@ if ($method == 'GET') {
 	}
 } else {
 	http_response_code (405);
-	echo "Method not allowed";
+	$output = array();
+	$output["error_code"] = 405;
+	$output["error_message"] = "Method not allowed";
+	header('Content-Type: application/json; charset=utf-8');
+	echo json_encode($output);
+	error_log("Method not allowed: ".$method);
 }
 
 function get_latest_version($transformation_id_padded){
