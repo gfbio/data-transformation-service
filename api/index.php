@@ -291,14 +291,14 @@ if ($method == 'GET') {
 			$job_json["job"]["input_file_zipped"] = $input_file_zipped;
 			$job_json["job"]["query"] = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 			$input_file_name = substr($input_file_url, strrpos($input_file_url,"/")+1);
+			$input_file_name = (strpos($input_file_name, "?") !== false) ? substr($input_file_name, 0, strpos($input_file_name, "?")) : $input_file_name;
 			$url = substr($input_file_url, 0, strrpos($input_file_url,"/")+1);
 			$job_json["job"]["input_file"] = "input/".$input_file_name;
 			error_log($url . rawurlencode($input_file_name));
 			
 			$input_file_url = $url . rawurlencode($input_file_name);
-			$input_file_url = str_replace("%3F", "?", $input_file_url);
-			$input_file_url = str_replace("%26", "&", $input_file_url);
-			if (!filter_var($input_file_url, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) && !filter_var($url, FILTER_VALIDATE_URL)) {
+			$input_file_url = rawurldecode($input_file_url);
+			if (!filter_var($input_file_url, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) && !(filter_var(substr($input_file_url, 0, strpos($input_file_url, "?")), FILTER_VALIDATE_URL) || filter_var($url, FILTER_VALIDATE_URL))) {
 				header('Content-Type: application/json; charset=utf-8');
 				http_response_code (404);
 				$output = array();
@@ -308,6 +308,7 @@ if ($method == 'GET') {
 				error_log("Invalid URL: ".$input_file_url);
 				return;
 			}
+			$input_file_url = (strpos($input_file_url, " ") !== false) ? str_replace(" ", "%20", $input_file_url) : $input_file_url; # file_get_contents does not like spaces in URLs
 			$input_file_content = @file_get_contents($input_file_url);
 			$length = strlen($input_file_content);
 			if ($length == 0) {
@@ -330,7 +331,7 @@ if ($method == 'GET') {
 				error_log("File larger than 100MB: ".$input_file_url);
 				return;
 			}
-			elseif ($job_json["job"]["transformation_id"] == "5" && substr($input_file_content, 0, 5) != "<?xml") {
+			elseif ($job_json["job"]["transformation_id"] == "5" && substr($input_file_content, 0, 5) != "<?xml") { # TODO: Valid xml must not contain a declaration node
 				header('Content-Type: application/json; charset=utf-8');
 				http_response_code (404);
 				$output = array();
@@ -496,7 +497,7 @@ function python_transformation($job_json,$transformation_json){
 	$result_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["result_file"];
 	
 	//TODO: Specify python version in configuration
-	$command = "python3 ".$python_file." ".$input_file." ".$result_file." ".$style_file;
+	$command = "python ".$python_file." ".$input_file." ".$result_file." ".$style_file;
 	//TODO: Execute command without waiting for it to finish
 	shell_exec($command);
 
