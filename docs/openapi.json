@@ -191,7 +191,7 @@
                     {
                         "name": "input_file_url",
                         "in": "query",
-                        "description": "URL of input file",
+                        "description": "URL of the input file (UTF-8 encoded if it includes parameters)",
                         "required": true,
                         "schema": {
                             "type": "string"
