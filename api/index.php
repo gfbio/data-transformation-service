@@ -312,6 +312,7 @@ if ($method == 'GET') {
 			$input_file_content = @file_get_contents($input_file_url);
 			$header = @get_headers($input_file_url);
 			$is_xml = !(str_replace("/xml", "", $header) == $header) || substr($input_file_content, 0, 5) == "<?xml";
+			$is_zip = !(str_replace("/zip", "", $header) == $header);
 			$length = strlen($input_file_content);
 			if ($length == 0) {
 				header('Content-Type: application/json; charset=utf-8');
@@ -333,7 +334,7 @@ if ($method == 'GET') {
 				error_log("File larger than 100MB: ".$input_file_url);
 				return;
 			}
-			elseif ($job_json["job"]["transformation_id"] == "5" && !$is_xml) {
+			elseif ($job_json["job"]["transformation_id"] == "5" && !($is_xml || $is_zip)) {
 				header('Content-Type: application/json; charset=utf-8');
 				http_response_code (404);
 				$output = array();
@@ -495,11 +496,49 @@ function python_transformation($job_json,$transformation_json){
 	$version_id_padded = str_pad($transformation_json["version"]["version_id"], $padding_width, '0', STR_PAD_LEFT);
 	$python_file = "transformations/".$transformation_id_padded."/".$version_id_padded."/".$transformation_json["version"]["files"][0];
 	$style_file = "transformations/".$transformation_id_padded."/".$version_id_padded."/".$transformation_json["version"]["files"][1];
+	$input_file_zipped = $job_json["job"]["input_file_zipped"];
+	
+	if ($input_file_zipped == 'true') {
+		$zip = new ZipArchive;
+		$zip_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["input_file"];
+		$zip->open($zip_file);
+		$zip->extractTo("results/".$job_json["job"]["job_id"]."/input/");
+		$zip->close();
+	}
+	$xml_files = glob("results/".$job_json["job"]["job_id"]."/input/*.xml");
+	
+	if ($input_file_zipped == 'true' && sizeof($xml_files) > 0) {
+		$job_json["job"]["result_file"] = "output/result.zip";
+		foreach ($xml_files as $file) {
+			$input_file = $file;
+			$result_file = "results/".$job_json["job"]["job_id"]."/output/".basename($file);
+			$result_file = str_replace(".xml", ".json", $result_file);
+			$command = "python ".$python_file." ".$input_file." ".$result_file." ".$style_file;
+			shell_exec($command);
+		}
+		# zip the output json files
+		$zip = new ZipArchive;
+		$zip_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["result_file"];
+		$zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+		foreach ($xml_files as $file) {
+			$result_file = "results/".$job_json["job"]["job_id"]."/output/".basename($file);
+			$result_file = str_replace(".xml", ".json", $result_file);
+			$zip->addFile($result_file, basename($result_file));
+		}
+
+		$zip->close();
+
+		# TODO: remove the output json files
+		
+		return $job_json;
+	}
+
+	
 	$input_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["input_file"];
 	$result_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["result_file"];
 	
 	//TODO: Specify python version in configuration
-	$command = "python3 ".$python_file." ".$input_file." ".$result_file." ".$style_file;
+	$command = "python ".$python_file." ".$input_file." ".$result_file." ".$style_file;
 	//TODO: Execute command without waiting for it to finish
 	shell_exec($command);
 
