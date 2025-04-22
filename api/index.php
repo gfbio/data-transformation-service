@@ -491,6 +491,7 @@ function python_transformation($job_json,$transformation_json){
 	$padding_width = 4;
 	$job_json["job"]["status"] = "complete";
 	$job_json["job"]["result_file"] = "output/result.json";
+	$python_version = $GLOBALS['python_version'];
 	
 	$transformation_id_padded = str_pad($transformation_json["version"]["transformation_id"], $padding_width, '0', STR_PAD_LEFT);
 	$version_id_padded = str_pad($transformation_json["version"]["version_id"], $padding_width, '0', STR_PAD_LEFT);
@@ -513,10 +514,10 @@ function python_transformation($job_json,$transformation_json){
 			$input_file = $file;
 			$result_file = "results/".$job_json["job"]["job_id"]."/output/".basename($file);
 			$result_file = str_replace(".xml", ".json", $result_file);
-			$command = "python3 ".$python_file." ".$input_file." ".$result_file." ".$style_file;
+			$command = $python_version." ".$python_file." ".$input_file." ".$result_file." ".$style_file;
 			shell_exec($command);
 		}
-		# zip the output json files
+
 		$zip = new ZipArchive;
 		$zip_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["result_file"];
 		$zip->open($zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -525,20 +526,25 @@ function python_transformation($job_json,$transformation_json){
 			$result_file = str_replace(".xml", ".json", $result_file);
 			$zip->addFile($result_file, basename($result_file));
 		}
-
 		$zip->close();
-
-		# TODO: remove the output json files
+		
+		# remove unzipped input and output files
+		foreach ($xml_files as $file) {
+			$input_file = $file;
+			$result_file = "results/".$job_json["job"]["job_id"]."/output/".basename($file);
+			$result_file = str_replace(".xml", ".json", $result_file);
+			unlink($input_file);
+			unlink($result_file);
+		}
 		
 		return $job_json;
 	}
-
 	
 	$input_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["input_file"];
 	$result_file = "results/".$job_json["job"]["job_id"]."/".$job_json["job"]["result_file"];
 	
-	//TODO: Specify python version in configuration
-	$command = "python3 ".$python_file." ".$input_file." ".$result_file." ".$style_file;
+	$command = $python_version." ".$python_file." ".$input_file." ".$result_file." ".$style_file;
+
 	//TODO: Execute command without waiting for it to finish
 	shell_exec($command);
 
