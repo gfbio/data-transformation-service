@@ -1,0 +1,138 @@
+ABCD Element Group,ABCD 2.06 Element,Bioschemas/schema.org Property,Bioschemas/schema.org (Data)Types,Description,Mapping Notes
+Dataset GUID,/DataSets/DataSet/DatasetGUID,@id; identifier,IRI; URL,The dataset's globally unique identifier.,
+Technical Contact,/DataSets/DataSet/TechnicalContacts/TechnicalContact,publisher,Organization,The publishing organization of the dataset.,
+Technical Contact,/DataSets/DataSet/TechnicalContacts/TechnicalContact/Name,publisher:name,Text,,
+Technical Contact,/DataSets/DataSet/TechnicalContacts/TechnicalContact/Email,publisher:email,Text,,
+Technical Contact,/DataSets/DataSet/TechnicalContacts/TechnicalContact/Address,publisher:address,Text,,
+Technical Contact,/DataSets/DataSet/TechnicalContacts/TechnicalContact/Phone,publisher:telephone,Text,,
+Content Contact,/DataSets/DataSet/ContentContacts/ContentContact,maintainer,Organization,The organization responsible for the dataset content and its maintenance.,
+Content Contact,/DataSets/DataSet/ContentContacts/ContentContact/Name,maintainer:name,Text,,
+Content Contact,/DataSets/DataSet/ContentContacts/ContentContact/Email,maintainer:email,Text,,
+Content Contact,/DataSets/DataSet/ContentContacts/ContentContact/Address,maintainer:address,Text,,
+Content Contact,/DataSets/DataSet/ContentContacts/ContentContact/Phone,maintainer:telephone,Text,,
+Description,/DataSets/DataSet/Metadata/Description/Representation/Title,name,Text,The title of the dataset.,
+Description,/DataSets/DataSet/Metadata/Description/Representation/Details,description,Text,A longer description of the dataset project.,
+Description,/DataSets/DataSet/Metadata/Description/Representation/Coverage,keywords,Text,"Conceptualized aspects (e.g., geography, taxonomy) of the dataset project.",
+Description,/DataSets/DataSet/Metadata/Description/Representation/URI,url,URL,Link to the dataset meta information.,
+RevisionData,/DataSets/DataSet/Metadata/RevisionData/DateCreated,dateCreated,Date,Date of dataset creation.,Only date before 'T' in ISO Datetime
+RevisionData,/DataSets/DataSet/Metadata/RevisionData/DateModified,dateModified or datePublished,Date,Date of last dataset update.,Only date before 'T' in ISO Datetime
+RevisionData,/DataSets/DataSet/Metadata/RevisionData/Contributors,contributor,Person,"Persons that contributed to the dataset, e.g. as translators.",Usually comma-separated strings.
+RevisionData,/DataSets/DataSet/Metadata/RevisionData/Contributors,contributor:name,Text,,
+RevisionData,/DataSets/DataSet/Metadata/RevisionData/Creators,creator,Person,Authors or editors of dataset.,Usually comma-separated strings.
+RevisionData,/DataSets/DataSet/Metadata/RevisionData/Creators,creator:name,Text,,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/Licenses/License,license,CreativeWork,The public license used for the dataset publication.,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/Licenses/License/Text,license:name,Text,,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/Licenses/License/Details,license:description,Text,,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/Licenses/License/URI,license:url,URL,,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/TermsOfUseStatements/TermsOfUse,usageInfo,CreativeWork,Specified conditions and restrictions for subsequent data usage.,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/TermsOfUseStatements/TermsOfUse,usageInfo:additionalType,Text,,Value: TermsOfUseStatement
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/TermsOfUseStatements/TermsOfUse/Text,usageInfo:name,Text,,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/TermsOfUseStatements/TermsOfUse/Details,usageInfo:description,Text,,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/TermsOfUseStatements/TermsOfUse/URI,usageInfo:url,URL,,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/Citations/Citation,usageInfo,CreativeWork,Specified way how to cite the dataset.,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/Citations/Citation,usageInfo,Text,,Value: Citation
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/Citations/Citation/Text,usageInfo:name,Text,,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/Citations/Citation/Details,usageInfo:description,Text,,
+IPRStatements,/DataSets/DataSet/Metadata/IPRStatements/Citations/Citation/URI,usageInfo:url,URL,,
+Scope,/DataSets/DataSet/Metadata/Scope/TaxonomicTerms/TaxonomicTerm,keywords,Text,Terms describing the taxonomic scope of the dataset.,
+Scope,/DataSets/DataSet/Metadata/Scope/TaxonomicTerms/GeoecologicalTerm,keywords,Text,Terms describing the geoecological scope of the dataset.,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/Organisation,author or author:affiliation,Organization,Data content owners are regarded as their authors.,Organization mapped to affiliation if owner includes a Person as well..
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/Organisation/Name/Representation/Text,author:name,Text,,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/Organisation/Name/Representation/Abbreviation,author:alternateName,Text,,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/Person,author,Person,Data content owners are regarded as their authors.,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/Person/FullName,author:name,Text,,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/Person/AtomisedName/InheritedName,author:familyName,Text,,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/Person/AtomisedName/GivenNames,author:givenName,Text,,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/EmailAddresses/EmailAddress,author:email,Text,,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/TelephoneNumbers/TelephoneNumber/Number,author:telephone,Text,,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/Roles/Role,author:jobTitle,Text,,
+Owner,/DataSets/DataSet/Metadata/Owners/Owner/URIs,author:identifier,URL,,
+Version,/DataSets/DataSet/Metadata/Version/Major,version,Text,,Mapped to the number preceding the decimal point.
+Version,/DataSets/DataSet/Metadata/Version/Minor,version,Text,,Mapped to the number after the decimal point.
+Version,/DataSets/DataSet/Metadata/Version/Modifier,version,Text,,Located at the end of the version specification.
+Version,/DataSets/DataSet/Metadata/Version/DateIssued,datePublished,Date,,Only date before 'T' in ISO Datetime
+DirectAccessURI,/DataSets/DataSet/Metadata/DirectAccessURI,distribution,DataDownload,"URL of the dataset source (e.g., download link or query interface).",
+DirectAccessURI,/DataSets/DataSet/Metadata/DirectAccessURI,distribution:url,URL,,Only if URL does not end with '.zip'.
+DirectAccessURI,/DataSets/DataSet/Metadata/DirectAccessURI,distribution:contentUrl,URL,,Only if URL ends with '.zip'.
+DirectAccessURI,/DataSets/DataSet/Metadata/DirectAccessURI,distribution:encodingFormat,Text,,Only if URL ends with '.zip'. Value: application/zip
+IconURI,/DataSets/DataSet/Metadata/IconURI,image,URL,URL of the image symbolizing the database project.,
+Unit IDs,/DataSets/DataSet/Units/Unit,about,BioSample,IDs of a unit.,All IDs are mapped to BioSample elements in about.
+Unit IDs,/DataSets/DataSet/Units/Unit/SourceInstitutionID,about:identifier,Text,Code of the institution where the collection is located.,In type BioSample. First part of the triple ID.
+Unit IDs,/DataSets/DataSet/Units/Unit/SourceID,about:identifier,Text,Code of the collection to which the unit belongs.,In type BioSample. Second part of the triple ID.
+Unit IDs,/DataSets/DataSet/Units/Unit/UnitID,about:identifier,Text,ID of the unit.,In type BioSample. Third part of the triple ID.
+Unit IDs,/DataSets/DataSet/Units/Unit/UnitGUID,about:identifier,Text or URL,Globally unique identifier of the unit.,In type BioSample.
+Unit IDs,/DataSets/DataSet/Units/Unit/UnitGUID,about:identifier,URL,Globally unique identifier of the unit.,"In type BioSample. If GUID is a URL, add GUID to url element in addition"
+RecordURI,/DataSets/DataSet/Units/Unit/RecordURI,about:identifier,URL,URL of the unit.,
+Identification,/DataSets/DataSet/Units/Unit/Identifications/Identification/Result/TaxonIdentified,about,Taxon,Taxon information about a unit.,
+Identification,/DataSets/DataSet/Units/Unit/Identifications/Identification/Result/TaxonIdentified/HigherTaxa/HigherTaxon/HigherTaxonName,about:name,Text,Name of a taxon of higher rank.,In type Taxon.
+Identification,/DataSets/DataSet/Units/Unit/Identifications/Identification/Result/TaxonIdentified/HigherTaxa/HigherTaxon/HigherTaxonRank,about:taxonRank,Text,,In type Taxon.
+Identification,/DataSets/DataSet/Units/Unit/Identifications/Identification/Result/TaxonIdentified/ScientificName/FullScientificNameString,about:name,Text,Species name of the unit.,In type Taxon.
+Identification,/DataSets/DataSet/Units/Unit/Identifications/Identification/Result/TaxonIdentified/ScientificName/FullScientificNameString,about:taxonRank,Text,,"In type Taxon. If one or more blanks, it's ""Species"". Else ""Genus""."
+RecordBasis,/DataSets/DataSet/Units/Unit/RecordBasis,additionalType,Text,Object or entity described by this unit.,
+KindOfUnit,/DataSets/DataSet/Units/Unit/KindOfUnit,keywords,Text,Type or class of material represented by this unit.,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject,associatedMedia,MediaObject,Multimedia objects related to the unit.,Mapped to the associatedMedia property of Dataset.
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/Context,associatedMedia:description,Text,,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/FileURI,associatedMedia:contentUrl,URL,,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/ProductURI,associatedMedia:mainEntityOfPage,URL,,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/Format,associatedMedia:encodingFormat,Text,,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/FileSize,associatedMedia:contentSize,Text,Size of file in kB.,"With appended ""kB""."
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/CreatedDate,associatedMedia:dateCreated,Date,,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/IPR/Licenses/License/Text,associatedMedia:license,CreativeWork,Specification of licenses that apply to the use of the multimedia objects.,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/IPR/Licenses/License/Text,associatedMedia:license:name,Text,,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/IPR/Licenses/License/Details,associatedMedia:license:description,Text,,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/IPR/Licenses/License/URI,associatedMedia:license:uri,URL,,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/Creator,associatedMedia:creator,Person,Name of the person that created the multimedia object.,
+MultiMedia,/DataSets/DataSet/Units/Unit/MultiMediaObjects/MultiMediaObject/Creator,associatedMedia:creator:name,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/DateTime/ISODateTimeBegin,temporalCoverage,DateTime,Start of period of collection event.,"If ISODateTimeEnd exists, mapped in front of ""/""."
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/DateTime/ISODateTimeEnd,temporalCoverage,DateTime,End of period of collection event.,"If ISODateTimeBegin exists, mapped behind ""/""."
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/Organization,contributor or contributor:affiliation,Organization,Collector organization.,Organization mapped to affiliation if gathering agent includes a Person as well.
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/Organization/Name/Representation/Text,contributor:name,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/Organization/Name/Representation/Abbreviation,contributor:alternateName,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/Organization/OrganizationGUID,contributor:identifier,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/Person,contributor,Person,Collector person.,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/Person/FullName,contributor:name,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/Person/AtomisedName/InheritedName,contributor:familyName,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/Person/AtomisedName/GivenNames,contributor:givenName,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/AgentText,contributor,Person,Name(s) of collector(s).,Usually comma-separated name strings.
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Agents/GatheringAgent/AgentText,contributor:name,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/LocalityText,spatialCoverage,Place,Location of the collection event.,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/LocalityText,spatialCoverage:description,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/SiteCoordinateSets/SiteCoordinates/CoordinatesLatLong,spatialCoverage:geo,GeoCoordinates,Coordinates of the collection event.,Map to the same Place used for LocalityText.
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/SiteCoordinateSets/SiteCoordinates/CoordinatesLatLong/LongitudeDecimal,spatialCoverage:geo:longitude,Number,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/SiteCoordinateSets/SiteCoordinates/CoordinatesLatLong/LatitudeDecimal,spatialCoverage:geo:latitude,Number,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/SiteCoordinateSets/SiteCoordinates/CoordinatesLatLong/SpatialDatum,spatialCoverage:geo:additionalType,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Country,spatialCoverage,Place,Country information of the location of the collection event.,Map to a separate Place.
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Country/Name,spatialCoverage:name,name,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Country/ISO3166Code,spatialCoverage:identifier,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/SiteCoordinateSets/SiteCoordinates/CoordinatesLatLong,spatialCoverage:geo,GeoShape,A bounding box that encompasses all coordinates.,Map to a single Place.
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/SiteCoordinateSets/SiteCoordinates/CoordinatesLatLong/LongitudeDecimal,spatialCoverage:geo:box,Text,,Extract the most western and eastern longitude.
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/SiteCoordinateSets/SiteCoordinates/CoordinatesLatLong/LatitudeDecimal,spatialCoverage:geo:box,Text,,Extract the most northern and southern latitude.
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Stratigraphy/ChronostratigraphicTerms/ChronostratigraphicTerm/Term,keywords,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Stratigraphy/LithostratigraphicTerms/LithostratigraphicTerm/Term,keywords,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Stratigraphy/LithostratigraphicTerms/LithostratigraphicTerm/Term,keywords,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Biotope/Name,keywords,Text,,
+Gathering,/DataSets/DataSet/Units/Unit/Gathering/Project/ProjectTitle,keywords,Text,,
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Altitude,variableMeasured,PropertyValue,Minimum and maximum altitude values in the dataset in meters.,
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Altitude,variableMeasured:name,Text,,Value: Elevation
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Altitude,variableMeasured:propertyID,URL,,Value: https://schema.org/elevation
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Altitude,variableMeasured:unitText,Text,,Value: m
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Altitude/LowerValue,variableMeasured:value or minValue,Number,,If UnitOfMeasurement does not exist or equals 'm'.
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Altitude/UpperValue,variableMeasured:maxValue,Number,,If UnitOfMeasurement does not exist or equals 'm'.
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Depth,variableMeasured,PropertyValue,Minimum and maximum depth values in the dataset in meters.,
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Depth,variableMeasured:name,Text,,Value: Depth
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Depth,variableMeasured:propertyID,URL,,Value: https://schema.org/depth
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Depth,variableMeasured:unitText,Text,,Value: m
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Depth/LowerValue,variableMeasured:value or minValue,Number,,If UnitOfMeasurement does not exist or equals 'm'.
+MeasurementOrFact,/DataSets/DataSet/Units/Unit/Gathering/Depth/UpperValue,variableMeasured:maxValue,Number,,If UnitOfMeasurement does not exist or equals 'm'.
+SourceReference,/DataSets/DataSet/Units/Unit/SourceReference,citation,CreativeWork,A work that is the unit information source.,
+SourceReference,/DataSets/DataSet/Units/Unit/SourceReference/ReferenceGUID,citation:identifier,URL or Text,,Type URL if GUID starts with 'http'.
+SourceReference,/DataSets/DataSet/Units/Unit/SourceReference/TitleCitation,citation:name,Text,,
+SourceReference,/DataSets/DataSet/Units/Unit/SourceReference/CitationDetail,citation:description,Text,,
+SourceReference,/DataSets/DataSet/Units/Unit/SourceReference/URI,citation:url,URL,,
+SourceReference,/DataSets/DataSet/Units/Unit/SourceReference/DOI,citation:identifier,Text,,
+UnitReference,/DataSets/DataSet/Units/Unit/UnitReferences/UnitReference,@reverse:citation,CreativeWork,A work that cites this unit.,
+UnitReference,/DataSets/DataSet/Units/Unit/UnitReferences/UnitReference/ReferenceGUID,@reverse:citation:identifier,URL or Text,,
+UnitReference,/DataSets/DataSet/Units/Unit/UnitReferences/UnitReference/TitleCitation,@reverse:citation:name,Text,,
+UnitReference,/DataSets/DataSet/Units/Unit/UnitReferences/UnitReference/CitationDetail,@reverse:citation:description,Text,,
+UnitReference,/DataSets/DataSet/Units/Unit/UnitReferences/UnitReference/URI,@reverse:citation:url,URL,,
+UnitReference,/DataSets/DataSet/Units/Unit/UnitReferences/UnitReference/DOI,@reverse:citation:identifier,Text,,
