@@ -6,6 +6,16 @@ import saxonche as saxon
 from saxonche import PySaxonProcessor
 import xmltodict
 
+def remove_duplicates(d):
+    if isinstance(d, dict):
+        for key, value in d.items():
+            d[key] = remove_duplicates(value)
+        return d
+    elif isinstance(d, list):
+        unique_list = list({json.dumps(item, sort_keys=False): item for item in d}.values())
+        return [remove_duplicates(item) for item in unique_list]
+    else:
+        return d
 
 def key_renaming(schema_dict, old_key, new_key):
     try:
@@ -68,6 +78,12 @@ def transform(xml, stylesheet_file):
         # rename keys to be JSON-LD compliant
         if schema_dict['jsonld'].get('reverse') is not None:
             schema_dict = key_renaming(schema_dict, 'reverse', '@reverse')
+    except Exception as e:
+        print(e)
+        schema_dict = None
+
+    try:
+        schema_dict = remove_duplicates(schema_dict)
     except Exception as e:
         print(e)
         schema_dict = None

@@ -71,8 +71,10 @@ exclude-result-prefixes="xsl md panxslt set">
     <jsonld>
       <xsl:attribute name="context">http://schema.org/</xsl:attribute>
       <xsl:attribute name="type">Dataset</xsl:attribute>
-      <xsl:attribute name="id"><xsl:value-of select="$dataset_id"/></xsl:attribute>
-      <identifier><xsl:value-of select="$dataset_id"/></identifier>
+      <xsl:if test="$dataset_id">
+        <xsl:attribute name="id"><xsl:value-of select="$dataset_id"/></xsl:attribute>
+        <identifier><xsl:value-of select="$dataset_id"/></identifier>
+      </xsl:if>
       <name><xsl:value-of select="$dataset_title" /></name>
       <xsl:if test="$dataset_url">
         <url><xsl:value-of select="$dataset_url" /></url>
@@ -123,9 +125,6 @@ exclude-result-prefixes="xsl md panxslt set">
           </xsl:otherwise>
         </xsl:choose>
       </datePublished>
-      <distribution type="DataDownload">
-        <url><xsl:value-of select="$dataset_direct_access" /></url>
-      </distribution>
       <isAccessibleForFree xsi:type="xs:boolean">true</isAccessibleForFree>
       <size type="QuantitativeValue">
         <value xsi:type="xs:int"><xsl:value-of select="count(/abcd:DataSets/abcd:DataSet/abcd:Units/abcd:Unit)" /></value>
@@ -383,15 +382,29 @@ exclude-result-prefixes="xsl md panxslt set">
     <!-- associatedMedia -->
     <xsl:for-each select="$multimedia_object">
       <associatedMedia type="MediaObject">
-        <contentUrl><xsl:value-of select="./abcd:FileURI"/></contentUrl>
-        <mainEntityOfPage><xsl:value-of select="./abcd:ProductURI"/></mainEntityOfPage>
-        <encodingFormat><xsl:value-of select="./abcd:Format"/></encodingFormat>
-        <contentSize><xsl:value-of select="./abcd:FileSize"/> kB</contentSize>
-        <description><xsl:value-of select="./abcd:Context"/></description>
-        <dateCreated type="xs:date"><xsl:value-of select="./abcd:CreatedDate"/></dateCreated>    
-        <creator type="Person">
-          <name><xsl:value-of select="./abcd:Creator"/></name>
-        </creator>
+        <xsl:if test="./abcd:FileURI">
+          <contentUrl><xsl:value-of select="./abcd:FileURI"/></contentUrl>
+        </xsl:if>
+        <xsl:if test="./abcd:ProductURI">
+          <mainEntityOfPage><xsl:value-of select="./abcd:ProductURI"/></mainEntityOfPage>
+        </xsl:if>
+        <xsl:if test="./abcd:Format">
+          <encodingFormat><xsl:value-of select="./abcd:Format"/></encodingFormat>
+        </xsl:if>
+        <xsl:if test="./abcd:FileSize">
+          <contentSize><xsl:value-of select="./abcd:FileSize"/> kB</contentSize>
+        </xsl:if>
+        <xsl:if test="./abcd:Context">
+          <description><xsl:value-of select="./abcd:Context"/></description>
+        </xsl:if>
+        <xsl:if test="./abcd:CreatedDate">
+          <dateCreated type="xs:date"><xsl:value-of select="./abcd:CreatedDate"/></dateCreated>
+        </xsl:if>
+        <xsl:if test="./abcd:Creator">
+          <creator type="Thing">
+            <name><xsl:value-of select="./abcd:Creator"/></name>
+          </creator>
+        </xsl:if>
         <xsl:for-each select="./abcd:IPR/abcd:Licenses/abcd:License">
           <license type="CreativeWork">
             <xsl:if test="./abcd:Text">
@@ -405,11 +418,6 @@ exclude-result-prefixes="xsl md panxslt set">
             </xsl:if>
           </license>
         </xsl:for-each>
-        <xsl:if test="./abcd:Creator">
-          <creator type="Person">
-            <name><xsl:value-of select="./abcd:Creator"/></name>
-          </creator>
-        </xsl:if>
       </associatedMedia>
     </xsl:for-each>    
       
@@ -429,8 +437,8 @@ exclude-result-prefixes="xsl md panxslt set">
       <xsl:for-each select="$lithostratigraphic[not(.=preceding::*)]">  
         <keywords><xsl:value-of select="."/></keywords>
       </xsl:for-each>
-      <xsl:for-each select="$biotope[not(.=preceding::*)]">  
-        <keywords><xsl:value-of select="./abcd:Name"/></keywords>
+      <xsl:for-each select="$biotope/abcd:Name[not(.=preceding::*)]">  
+        <keywords><xsl:value-of select="."/></keywords>
       </xsl:for-each>
       <xsl:for-each select="$project_title[not(.=preceding::*)]">  
         <keywords><xsl:value-of select="."/></keywords>
@@ -441,36 +449,38 @@ exclude-result-prefixes="xsl md panxslt set">
 
 
       <!-- @reverse -->
-      <xsl:element name="reverse">
-        <xsl:for-each select="$unit_references">
-          <xsl:for-each select="./abcd:UnitReference[not(.=preceding::*)]">
-            <citation type="CreativeWork">
-              <xsl:if test="./abcd:TitleCitation">
-                <name><xsl:value-of select="./abcd:TitleCitation"/></name>
-              </xsl:if>
-              <xsl:if test="./abcd:CitationDetail">
-                <description><xsl:value-of select="./abcd:CitationDetail"/></description>
-              </xsl:if>
-              <xsl:if test="./abcd:URI">
-                <url><xsl:value-of select="./abcd:URI"/></url>
-              </xsl:if>   
-              <xsl:if test="./abcd:DOI">
-                <identifier><xsl:value-of select="./abcd:DOI"/></identifier>
-              </xsl:if>
-              <xsl:if test="./abcd:ReferenceGUID">
-                <xsl:choose>
-                  <xsl:when test="starts-with(./abcd:ReferenceGUID, 'http')">
-                    <identifier type="URL"><xsl:value-of select="./abcd:ReferenceGUID"/></identifier>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <identifier><xsl:value-of select="./abcd:ReferenceGUID"/></identifier>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:if>
-            </citation>
+      <xsl:if test="count($unit_references/abcd:UnitReference) &gt; 0">
+        <xsl:element name="reverse">
+          <xsl:for-each select="$unit_references">
+            <xsl:for-each select="./abcd:UnitReference[not(.=preceding::*)]">
+              <citation type="CreativeWork">
+                <xsl:if test="./abcd:TitleCitation">
+                  <name><xsl:value-of select="./abcd:TitleCitation"/></name>
+                </xsl:if>
+                <xsl:if test="./abcd:CitationDetail">
+                  <description><xsl:value-of select="./abcd:CitationDetail"/></description>
+                </xsl:if>
+                <xsl:if test="./abcd:URI">
+                  <url><xsl:value-of select="./abcd:URI"/></url>
+                </xsl:if>   
+                <xsl:if test="./abcd:DOI">
+                  <identifier><xsl:value-of select="./abcd:DOI"/></identifier>
+                </xsl:if>
+                <xsl:if test="./abcd:ReferenceGUID">
+                  <xsl:choose>
+                    <xsl:when test="starts-with(./abcd:ReferenceGUID, 'http')">
+                      <identifier type="URL"><xsl:value-of select="./abcd:ReferenceGUID"/></identifier>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <identifier><xsl:value-of select="./abcd:ReferenceGUID"/></identifier>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:if>
+              </citation>
+            </xsl:for-each>
           </xsl:for-each>
-        </xsl:for-each>
-      </xsl:element>
+        </xsl:element>
+      </xsl:if>
 
       <!-- citation -->
       <xsl:for-each select="$source_reference[not(.=preceding::*)]">  
