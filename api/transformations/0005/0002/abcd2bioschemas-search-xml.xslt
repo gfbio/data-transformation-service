@@ -534,20 +534,6 @@ exclude-result-prefixes="xsl md panxslt set">
         <xsl:choose>        
           <xsl:when test="./abcd:Person">
             <author type="Person">
-              <!-- identifier -->
-              <xsl:if test="./abcd:URIs/*[self::abcd:URI or self::abcd:URL]">
-                  <xsl:choose>        
-                    <xsl:when test="./abcd:URIs/*[self::abcd:URI or self::abcd:URL][@preferred='true']">
-                      <xsl:attribute name="id"><xsl:value-of select="./abcd:URIs/*[self::abcd:URI or self::abcd:URL][@preferred='true'][1]"/></xsl:attribute>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:attribute name="id"><xsl:value-of select="./abcd:URIs/*[self::abcd:URI or self::abcd:URL][1]"/></xsl:attribute>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                <xsl:for-each select="./abcd:URIs/*[self::abcd:URI or self::abcd:URL][not(.=preceding::*)]">
-                  <identifier><xsl:value-of select="."/></identifier>
-                </xsl:for-each>
-              </xsl:if>
               
               <!-- name -->
               <name><xsl:value-of select="./abcd:Person/abcd:FullName"/></name>
@@ -590,7 +576,19 @@ exclude-result-prefixes="xsl md panxslt set">
                   <xsl:if test="./abcd:Organisation/abcd:Name/abcd:Representation/abcd:Abbreviation">
                     <alternateName><xsl:value-of select="./abcd:Organisation/abcd:Name/abcd:Representation/abcd:Abbreviation"/></alternateName>
                   </xsl:if>
+                  <xsl:if test="./abcd:URIs/*[self::abcd:URI or self::abcd:URL]">
+                    <xsl:for-each select="./abcd:URIs/*[self::abcd:URI or self::abcd:URL]">
+                      <identifier><xsl:value-of select="."/></identifier>
+                    </xsl:for-each>
+                  </xsl:if>
                 </affiliation>
+              </xsl:if>
+
+              <!-- identifier: If affiliated organization is missing, the URL is probably a person ID -->
+              <xsl:if test="not(./abcd:Organisation)">
+                <xsl:for-each select="./abcd:URIs/*[self::abcd:URI or self::abcd:URL][not(.=preceding::*)]">
+                  <identifier><xsl:value-of select="."/></identifier>
+                </xsl:for-each>
               </xsl:if>
 
               <!-- jobTitle: Roles -->
@@ -912,9 +910,12 @@ exclude-result-prefixes="xsl md panxslt set">
               <xsl:choose>
                 <xsl:when test="contains(./abcd:AgentText,',')">
                   <xsl:for-each select="tokenize(./abcd:AgentText,',')">
-                    <contributor type="Person">
-                      <name><xsl:value-of select="."/></name>
-                    </contributor>
+                    <!-- Avoid initials as separate contributors -->
+                    <xsl:if test="not(substring(normalize-space(.),2,1) = '.')">
+                      <contributor type="Person">
+                        <name><xsl:value-of select="."/></name>
+                      </contributor>
+                    </xsl:if>
                   </xsl:for-each>
                 </xsl:when>
                 <xsl:otherwise>

@@ -287,7 +287,7 @@ if ($method == 'GET') {
 			$job_json["job"]["job_id"] = $job_id;
 			$job_json["job"]["transformation_id"] = ltrim($transformation, '0');
 			$job_json["job"]["version_id"] = ltrim($version, '0');
-			$job_json["job"]["input_file_url"] = $input_file_url;
+			$job_json["job"]["input_file_url"] = str_replace(" ","%20",$input_file_url);
 			$job_json["job"]["input_file_zipped"] = $input_file_zipped;
 			$job_json["job"]["query"] = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 			# File name creation (avoids some corrupting characters)
