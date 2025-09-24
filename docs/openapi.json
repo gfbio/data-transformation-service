@@ -211,7 +211,7 @@
                 ]
             }
         },
-        "/results": {
+        "/results/{job}/": {
             "get": {
                 "summary": "Return transformation job file",
                 "responses": {
@@ -246,7 +246,7 @@
                         "description": "Job ID",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ]
