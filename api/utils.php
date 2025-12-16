@@ -90,3 +90,10 @@ function get_creative_commons_icon($license){
 		return "";
 	}
 }
+
+function log_request($request_url, $remote_addr){
+	$log_file = dirname(__FILE__, 4)."/log/dts/transform_requests.log";
+	// $log_file = dirname(__FILE__, 4)."/transform_requests.log"; # for local testing
+	$timestamp = date("Y-m-d H:i:s");
+	error_log("[$timestamp] $remote_addr requested: $request_url\n", 3, $log_file);
+}
