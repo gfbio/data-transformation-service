@@ -6,12 +6,12 @@
     },
     "servers": [
         {
-            "url": "http://localhost:822/data-transformation-service/data-transformation-service/api",
-            "description": "Local server"
-        },
-        {
             "url": "https://transformation.gfbio.org/api",
             "description": "Production server"
+        },
+        {
+            "url": "http://localhost:822/data-transformation-service/data-transformation-service/api",
+            "description": "Local server"
         }
     ],
     "paths": {
