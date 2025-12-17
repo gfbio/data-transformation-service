@@ -92,8 +92,8 @@ function get_creative_commons_icon($license){
 }
 
 function log_request($request_url, $remote_addr){
-	$log_file = dirname(__FILE__, 4)."/log/dts/transform_requests.log";
-	// $log_file = dirname(__FILE__, 4)."/transform_requests.log"; # for local testing
-	$timestamp = date("Y-m-d H:i:s");
+	$log_file = "/var/log/dts/transform_requests.log";
+	date_default_timezone_set("Europe/Berlin");
+	$timestamp = date("c"); //ISO date time
 	error_log("[$timestamp] $remote_addr requested: $request_url\n", 3, $log_file);
 }
