@@ -183,6 +183,12 @@ if ($method == 'GET') {
 			echo json_encode($output);
 		}
 	}else if($service == "transform"){
+
+		$request_url_protocol = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http')."://";
+		$request_url = $request_url_protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		$remote_ip = $_SERVER['REMOTE_ADDR'];
+		log_request($request_url, $remote_ip);
+		
 		$transformation = get_url_parameter('transformation');
 		$version = get_url_parameter('version');
 		$input_file_url = get_url_parameter('input_file_url');
@@ -289,7 +295,7 @@ if ($method == 'GET') {
 			$job_json["job"]["version_id"] = ltrim($version, '0');
 			$job_json["job"]["input_file_url"] = str_replace(" ","%20",$input_file_url);
 			$job_json["job"]["input_file_zipped"] = $input_file_zipped;
-			$job_json["job"]["query"] = (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http')."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+			$job_json["job"]["query"] = $request_url;
 			# File name creation (avoids some corrupting characters)
 			$input_file_name = parse_url($input_file_url)["path"];
 			$input_file_name = (strpos($input_file_name, "/") !== false) ? substr($input_file_name, strrpos($input_file_name,"/")+1) : $input_file_name;
